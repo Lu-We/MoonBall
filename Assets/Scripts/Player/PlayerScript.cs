@@ -3,16 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
-{
-    // Start is called before the first frame update
+{    
+    internal MovementManager movementManager;
+    internal InputManager inputManager;
+    internal StateManager stateManager;
+    public Rigidbody playerRb;
+
+ 
+
+    
     void Start()
     {
-        
-    }
+        playerRb        = GetComponent<Rigidbody>();
+        movementManager = GetComponent<MovementManager>();
+        inputManager    = GetComponent<inputManager>();
+        stateManager    = GetComponent<stateManager>();
+    }  
 
-    // Update is called once per frame
-    void Update()
+ 
+    private void FixedUpdate()
     {
-        
+        // Detect ground surface
+
     }
 }
+
