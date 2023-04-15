@@ -16,8 +16,8 @@ public class PlayerScript : MonoBehaviour
     {
         playerRb        = GetComponent<Rigidbody>();
         movementManager = GetComponent<MovementManager>();
-        inputManager    = GetComponent<inputManager>();
-        stateManager    = GetComponent<stateManager>();
+        inputManager    = GetComponent<InputManager>();
+        stateManager    = GetComponent<StateManager>();
     }  
 
  

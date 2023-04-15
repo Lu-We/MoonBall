@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class StateManager : MonoBehaviour
 {
+    internal PlayerScript player;
+    public LayerMask groundLayer;
+
     private bool isGrounded = false;
     private bool isJumping = false;
     private bool isFalling = false;
     private bool isWalking = false;
+
+    private float CoyoteTime = 0.2f;
+    private float groundedRemember;
+
+    private void Start() {
+        player = GetComponent<PlayerScript>();
+    }
 
     private void FixedUpdate() {
         isGrounded  = CheckGroundedState();
@@ -19,8 +29,8 @@ public class StateManager : MonoBehaviour
     private bool CheckGroundedState()
     {    
         RaycastHit hitinfo;
-        Debug.DrawRay(transform.position + transform.up * 0.5f, -transform.up*1.5f, Color.blue);
-        if(Physics.BoxCast(transform.position + transform.up * 0.25f, new Vector3(0.4f,0.1f,0.4f), -transform.up, out hitinfo, transform.rotation, 0.15f, groundLayer))
+        Debug.DrawRay(transform.position + transform.up * 0.25f, -transform.up*0.25f, Color.blue);
+        if(Physics.BoxCast(transform.position + transform.up * 0.25f, new Vector3(0.4f,0.1f,0.4f), -transform.up, out hitinfo, transform.rotation, 0.25f, groundLayer))
         {
             Debug.DrawRay(transform.position + transform.up * 0.5f, -transform.up*0.5f, Color.red);
             groundedRemember = CoyoteTime;
