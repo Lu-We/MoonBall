@@ -11,10 +11,13 @@ public class StateManager : MonoBehaviour
     private bool isJumping = false;
     private bool isFalling = false;
     private bool isWalking = false;
+    private bool isDashing = false;
 
     private float CoyoteTime = 0.2f;
     public float groundedRemember;
     public bool groundedLastFrame = false;
+
+    Coroutine dashStateSet;
 
     private void Start() {
         player = GetComponent<PlayerScript>();
@@ -24,19 +27,9 @@ public class StateManager : MonoBehaviour
 
         groundedLastFrame = isGrounded;
 
-        isGrounded  = CheckGroundedState();  
-        
+        isGrounded  = CheckGroundedState(); 
+        isWalking   = CheckWalkingState();  
 
-
-        isWalking   = CheckWalkingState();
-
-        
-    }
-
-    private void LateUpdate() {
-        // if(groundedLastFrame == false && isGrounded == true && isJumping == true ){
-        //     player.stateManager.SetIsJumping(false);
-        // }
     }
 
 
@@ -65,6 +58,23 @@ public class StateManager : MonoBehaviour
         }else{
             return false;
         }
+    }
+
+    public void TriggerDashState(float duration){     
+        dashStateSet = StartCoroutine(DashStateSet(duration));
+    }
+    
+    public void ExitDashState(){
+        if(dashStateSet != null)
+            StopCoroutine(dashStateSet);
+        isDashing = false;
+        player.movementManager.StopDash();  
+    }
+
+    public IEnumerator DashStateSet(float timeInSec){
+        isDashing = true;
+        yield return new WaitForSeconds(timeInSec);
+        ExitDashState();  
     }
 
     // Setter for isGrounded
@@ -114,6 +124,18 @@ public class StateManager : MonoBehaviour
     public bool GetIsWalking()
     {
         return isWalking;
+    }
+
+    // Setter for isDashing
+    public void SetIsDashing(bool value)
+    {
+        isDashing = value;
+    }
+
+    // Getter for isDashing
+    public bool GetIsDashing()
+    {
+        return isDashing;
     }
 }
 

@@ -8,6 +8,7 @@ public class PlayerScript : MonoBehaviour
     internal InputManager inputManager;
     internal StateManager stateManager;
     public Rigidbody playerRb;
+    public GameObject raquette;
 
  
 

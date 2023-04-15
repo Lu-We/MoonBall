@@ -13,6 +13,8 @@ public class InputManager : MonoBehaviour
         //Jump Buffers
     private float jumpPressedRememberTime = 0.2f;
     private float jumpPressedRemember;
+    private float dashPressedRememberTime = 0.2f;
+    private float dashPressedRemember;
 
     private void Start() {
         player = GetComponent<PlayerScript>();
@@ -28,6 +30,11 @@ public class InputManager : MonoBehaviour
 
         controls.Player.Jump.performed += ctx => JumpPressed();
         controls.Player.Jump.canceled  += ctx => JumpCanceled();
+
+        controls.Player.Dash.performed += ctx => DashPressed();   
+
+        controls.Player.Attack.performed += ctx => AttackPressed();
+        controls.Player.Attack.canceled += ctx => Attackcanceled();   
     }
 
     private void OnEnable() {
@@ -41,6 +48,22 @@ public class InputManager : MonoBehaviour
     void FixedUpdate()
     {   
         CheckJump();
+        CheckDash();
+    }
+
+    private void DashPressed(){
+        dashPressedRemember = dashPressedRememberTime;
+    }
+
+    private void CheckDash(){
+        dashPressedRemember -= Time.fixedDeltaTime;
+        //Check Jumping Intent and if player was (grounded + Coyotte time)
+        if((dashPressedRemember > 0))
+        {
+            dashPressedRemember = 0;
+            player.stateManager.SetIsDashing(true);
+            player.movementManager.PerformDash();       
+        }
     }
 
     private void JumpPressed(){
@@ -71,5 +94,12 @@ public class InputManager : MonoBehaviour
         return moveInput;
     }
 
+    private void AttackPressed(){
+        player.raquette.SetActive(true);
+    }
+
+    private void Attackcanceled(){
+        player.raquette.SetActive(false);
+    }
 
 }

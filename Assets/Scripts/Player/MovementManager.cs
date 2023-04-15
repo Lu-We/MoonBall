@@ -13,6 +13,9 @@ public class MovementManager : MonoBehaviour
 
     public float rotationSpeed = 50f;
 
+    public float dashForce = 100f;
+    public float dashTime = 10f;
+
    /********** JUMP **********/
     //Jump parameters
     public float jumpForce = 10f;  
@@ -67,7 +70,13 @@ public class MovementManager : MonoBehaviour
         Vector3 corrHor = moveInput.x * Camera.main.transform.right;
         Vector3 corrVer = moveInput.y * Camera.main.transform.forward;
         Vector3 combinedInput = corrHor + corrVer;
+
+        if( combinedInput.x < 0.2f && combinedInput.x > -0.2f){
+            combinedInput.x = 0f;
+        }
+
         moveDirection = new Vector3(combinedInput.x,0f,0f * combinedInput.y).normalized;
+
        
         // Calculate player rotation based on sphere's gravityNormal
         RaycastHit hitInfo;
@@ -86,23 +95,33 @@ public class MovementManager : MonoBehaviour
             transform.rotation =  targetRotation;//Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
 
             moveDirection   = transform.TransformDirection(moveDirection);
-            //movement
-            if(player.stateManager.GetIsGrounded()){
-                //acceleration & deceleration
-                playerVel = Vector3.Lerp(lastFrameVelocity.magnitude * moveDirection, moveDirection * moveSpeed, 15*Time.fixedDeltaTime );
-                
-                if(!player.stateManager.GetIsJumping()){
-                    gravityVel = gravityNormal * -0.1f;
-                    lastFrameGravity = gravityVel;
-                }
-                              
-            }
-            else{
-                playerVel   = Vector3.Lerp(lastFrameVelocity.magnitude * moveDirection, moveDirection * moveSpeed, 3*Time.fixedDeltaTime );
 
-                gravityVel = lastFrameGravity.magnitude * gravityNormal * Mathf.Sign(Vector3.Dot(gravityVel.normalized,gravityNormal.normalized)) ;                
-                gravityVel += (gravityNormal * gravity * (jumpFalloff-1) * Time.fixedDeltaTime) ;
-            }             
+            if(player.stateManager.GetIsDashing()){
+                if( moveDirection.magnitude == 0){
+                    playerVel = lastFrameVelocity.magnitude * transform.GetChild(0).forward;
+                }else{
+                    playerVel = lastFrameVelocity.magnitude * moveDirection;
+                }
+            }else{
+                //movement
+                if(player.stateManager.GetIsGrounded()){
+                    //acceleration & deceleration
+                    playerVel = Vector3.Lerp(lastFrameVelocity.magnitude * moveDirection, moveDirection * moveSpeed, 15*Time.fixedDeltaTime );
+                    
+                    if(!player.stateManager.GetIsJumping()){
+                        gravityVel = gravityNormal * -0.1f;
+                        lastFrameGravity = gravityVel;
+                    }
+                                
+                }
+                else{
+                    playerVel   = Vector3.Lerp(lastFrameVelocity.magnitude * moveDirection, moveDirection * moveSpeed, 3*Time.fixedDeltaTime );
+
+                    gravityVel = lastFrameGravity.magnitude * gravityNormal * Mathf.Sign(Vector3.Dot(gravityVel.normalized,gravityNormal.normalized)) ;                
+                    gravityVel += (gravityNormal * gravity * (jumpFalloff-1) * Time.fixedDeltaTime) ;
+                }         
+            }
+                
         }
     }
 
@@ -144,4 +163,26 @@ public class MovementManager : MonoBehaviour
         }
         player.playerRb.velocity = playerVel + gravityVel;
     }
+
+    public void PerformDash(){
+        Debug.Log("Dash");
+
+        CutJump(false);
+
+        player.stateManager.TriggerDashState(dashTime);
+        playerVel = transform.forward * dashForce;
+        lastFrameVelocity = playerVel;   
+
+        player.playerRb.velocity = playerVel; 
+    }
+
+    public void StopDash(){
+
+        playerVel = moveDirection * moveSpeed;
+        lastFrameVelocity = playerVel;   
+
+        player.playerRb.velocity = playerVel; 
+    }
+
+    
 }
