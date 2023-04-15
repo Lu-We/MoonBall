@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1056209119437633992
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FresnelMat
-  m_Shader: {fileID: -6465566751694194690, guid: 4df7fb6d9cf735248a2b8c0736346f96,
+  m_Name: MoonIn
+  m_Shader: {fileID: -6465566751694194690, guid: 45eda998f06a1524296fa6bb863988da,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -35,26 +48,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Emission: 0
-    - _FresnelPower: 0.6
-    - _Metalic: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Smoothness: 0
     m_Colors:
-    - _FresnelColor: {r: 0, g: 0, b: 0, a: 0}
-    - _MainColor: {r: 0, g: 0.9189248, b: 1, a: 0}
+    - _Color: {r: 0.8113207, g: 0.7642099, b: 0.6620684, a: 0}
+    - _Emission: {r: 0, g: 0.018620733, b: 0.135, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &7960838758321521283
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 5
