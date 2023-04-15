@@ -93,8 +93,27 @@ public class InputManager : MonoBehaviour
     public virtual Vector2 GetMoveInput(){
         return moveInput;
     }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position+transform.up*2, 8f);
+
+    }
 
     private void AttackPressed(){
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position+transform.up*2, 8f);
+        foreach(var other in hitColliders){
+            if(other.CompareTag("Ball")){
+                Ball ballHit = other.GetComponent<Ball>();
+                ballHit.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                ballHit.SetCurve(2);           
+                
+                ballHit.Accelerate(5f);
+                ballHit.ChangeDirection();
+            }
+        }
+
         player.raquette.SetActive(true);
     }
 

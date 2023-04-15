@@ -32,28 +32,28 @@ public class raquette : MonoBehaviour
     }
 
     private void Update() {
-        Debug.Log(moveInput);
-         if(moveInput.y > 0.2f){
+        if(moveInput.y > 0.2f){
                 transform.localPosition = basePos + transform.up;
                 curveNr = 2;
-            }
-            else if(moveInput.y <= 0.2f && moveInput.y >= -0.2f){
+        }
+        else if(moveInput.y <= 0.2f && moveInput.y >= -0.2f){
 
-                Vector3 offset = moveInput.x == 0f ? Vector3.zero : moveInput.x >= 0f ? -Vector3.right : Vector3.right;
+            Vector3 offset = moveInput.x == 0f ? Vector3.zero : moveInput.x >= 0f ? -Vector3.right : Vector3.right;
 
-                transform.localPosition = basePos + offset;
-                curveNr = 1;
-            }
-            else if(moveInput.y < 0.2f ){
-                transform.localPosition = basePos - transform.up;
-                curveNr = 0;
-            }
+            transform.localPosition = basePos + offset;
+            curveNr = 1;
+        }
+        else if(moveInput.y < 0.2f ){
+            transform.localPosition = basePos - transform.up;
+            curveNr = 0;
+        }
     }
     
+
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Ball")){
             Ball ballHit = other.GetComponent<Ball>();
-
+            ballHit.GetComponent<Rigidbody>().velocity = Vector3.zero;
             ballHit.SetCurve(curveNr);           
             
             ballHit.Accelerate(5f);

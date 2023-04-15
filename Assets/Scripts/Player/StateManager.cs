@@ -73,6 +73,7 @@ public class StateManager : MonoBehaviour
 
     public IEnumerator DashStateSet(float timeInSec){
         isDashing = true;
+        player.audioManager.PlayDashSFX();
         yield return new WaitForSeconds(timeInSec);
         ExitDashState();  
     }
@@ -93,6 +94,8 @@ public class StateManager : MonoBehaviour
     // Setter for isJumping
     public void SetIsJumping(bool value)
     {
+        if(value)
+            player.audioManager.PlayJumpSFX();
         isJumping = value;
     }
 
