@@ -12,15 +12,23 @@ public class StateManager : MonoBehaviour
     private bool isFalling = false;
     private bool isWalking = false;
     private bool isDashing = false;
+    private bool isCrouching = false;
 
     private float CoyoteTime = 0.2f;
     public float groundedRemember;
     public bool groundedLastFrame = false;
 
+    private float baseHurtboxHeight;
+    private Vector3 baseHurtboxPos;
+    private CapsuleCollider hurtbox;
+
     Coroutine dashStateSet;
 
     private void Start() {
         player = GetComponent<PlayerScript>();
+        hurtbox = player.hurtbox;
+        baseHurtboxPos = hurtbox.center;
+        baseHurtboxHeight = hurtbox.height;
     }
 
     private void FixedUpdate() {
@@ -28,11 +36,22 @@ public class StateManager : MonoBehaviour
         groundedLastFrame = isGrounded;
 
         isGrounded  = CheckGroundedState(); 
-        isWalking   = CheckWalkingState();  
+        isWalking   = CheckWalkingState();
+
+        HandleCrouchState();
 
     }
 
-
+    private void HandleCrouchState(){
+        if(GetIsCrouching()){ 
+            hurtbox.center = baseHurtboxPos /2f;         
+            hurtbox.height = baseHurtboxHeight / 2f;            
+        }
+        else{
+            hurtbox.center = baseHurtboxPos; 
+            hurtbox.height = baseHurtboxHeight;
+        }
+    }
     
     private bool CheckGroundedState()
     {    
@@ -139,6 +158,18 @@ public class StateManager : MonoBehaviour
     public bool GetIsDashing()
     {
         return isDashing;
+    }
+
+    // Setter for isCrouching
+    public void SetIsCrouching(bool value)
+    {
+        isCrouching = value;
+    }
+
+    // Getter for isCrouching
+    public bool GetIsCrouching()
+    {
+        return isCrouching;
     }
 }
 

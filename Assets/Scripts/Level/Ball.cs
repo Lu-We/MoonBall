@@ -91,5 +91,16 @@ public class Ball : MonoBehaviour
             myrenderer.material = medSpeedMat;
         }
     }
+
+
+    private void OnTriggerEnter(Collider other) {
+        if(other.CompareTag("Hurtbox")){
+            PlayerScript player = other.GetComponentInParent<PlayerScript>();
+            if(player == null)
+                return;
+            player.playerHealth.InflictDamage( ballSpeed / 10f );
+            Debug.Log(player.playerHealth.GetHealth());
+        }
+    }
     
 }

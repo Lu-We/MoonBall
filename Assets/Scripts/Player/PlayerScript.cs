@@ -8,8 +8,10 @@ public class PlayerScript : MonoBehaviour
     internal InputManager inputManager;
     internal StateManager stateManager;
     internal AudioManager audioManager;
+    internal PlayerHealth playerHealth;
     public Rigidbody playerRb;
     public GameObject raquette;
+    public CapsuleCollider hurtbox;
 
  
 
@@ -21,6 +23,7 @@ public class PlayerScript : MonoBehaviour
         inputManager    = GetComponent<InputManager>();
         stateManager    = GetComponent<StateManager>();
         audioManager    = GetComponent<AudioManager>();
+        playerHealth    = GetComponent<PlayerHealth>();
     }  
 
  

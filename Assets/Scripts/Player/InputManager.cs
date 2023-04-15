@@ -13,6 +13,8 @@ public class InputManager : MonoBehaviour
         //Jump Buffers
     private float jumpPressedRememberTime = 0.2f;
     private float jumpPressedRemember;
+    public  float dashCooldown = 1f;
+    private float nextDashTime = 0f;
     private float dashPressedRememberTime = 0.2f;
     private float dashPressedRemember;
 
@@ -49,6 +51,13 @@ public class InputManager : MonoBehaviour
     {   
         CheckJump();
         CheckDash();
+
+        if(moveInput.y < -0.2f){
+            Debug.Log("Crouch");
+            player.stateManager.SetIsCrouching(true);
+        }else{
+            player.stateManager.SetIsCrouching(false);
+        }
     }
 
     private void DashPressed(){
@@ -58,12 +67,19 @@ public class InputManager : MonoBehaviour
     private void CheckDash(){
         dashPressedRemember -= Time.fixedDeltaTime;
         //Check Jumping Intent and if player was (grounded + Coyotte time)
-        if((dashPressedRemember > 0))
+        if(dashPressedRemember > 0)
         {
-            dashPressedRemember = 0;
-            player.stateManager.SetIsDashing(true);
-            player.movementManager.PerformDash();       
-        }
+            if(Time.time > nextDashTime)
+            {
+                dashPressedRemember = 0;
+                nextDashTime = Time.time + dashCooldown;
+                player.stateManager.SetIsDashing(true);
+                player.movementManager.PerformDash();       
+            }else{
+                Debug.Log("Can't Dash : Cooldown = " + (nextDashTime - Time.time) );
+            }
+    }
+        
     }
 
     private void JumpPressed(){
