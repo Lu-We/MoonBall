@@ -731,6 +731,8 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  groundedRemember: 0
+  groundedLastFrame: 0
 --- !u!114 &1169918188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -748,9 +750,10 @@ MonoBehaviour:
     m_Bits: 8
   moveSpeed: 15
   rotationSpeed: 50
-  jumpForce: 10
-  jumpFalloff: 2.5
-  gravity: -4.9
+  jumpForce: 20
+  jumpFalloff: 5
+  cutJumpHeight: 0.5
+  gravity: -9.8
 --- !u!114 &1169918189
 MonoBehaviour:
   m_ObjectHideFlags: 0

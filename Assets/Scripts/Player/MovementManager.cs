@@ -8,14 +8,21 @@ public class MovementManager : MonoBehaviour
     public LayerMask groundLayer;
 
     public float moveSpeed = 5f;
+    Vector3 playerVel = Vector3.zero; 
 
 
     public float rotationSpeed = 50f;
 
-    public float jumpForce = 10f;
+   /********** JUMP **********/
+    //Jump parameters
+    public float jumpForce = 10f;  
     public float jumpFalloff = 2.5f;
-    public float gravity = -50f;
+    public float cutJumpHeight=0.5f;
 
+    /**************************/
+
+    public float gravity = -9.8f; // earth gravity
+    private Vector3 gravityNormal;
     
 
     private bool lastFrameGrounded = false;
@@ -31,83 +38,97 @@ public class MovementManager : MonoBehaviour
 
     private void FixedUpdate()
     {  
-        Vector3 playerVel = Vector3.zero;
+        playerVel = Vector3.zero;
         player.playerRb.velocity = Vector3.zero;
         
-        playerVel += MovePlayer(player.inputManager.GetMoveInput()); 
-    
+        MovePlayer(player.inputManager.GetMoveInput()); 
+        CheckJumpCollider();
 
-        // if(lastFrameVelocity.magnitude != 0 && (moveDirection.normalized.x != 0 || moveDirection.normalized.z != 0) ){
-        //         Quaternion rot = Quaternion.LookRotation(player);
-        //         player.playerRb.transform.rotation = rot;
-        // }
+        player.playerRb.velocity = playerVel + gravityVel;
 
-        //player.playerRb.velocity = playerVel;  
-        lastFrameGrounded = player.stateManager.GetIsGrounded();
+        lastFrameGrounded = player.stateManager.GetIsGrounded();                    
+        lastFrameVelocity = playerVel;
+        lastFrameGravity  = gravityVel;
     
     }
 
-    public Vector3 MovePlayer(Vector2 moveInput){
+    private void MovePlayer(Vector2 moveInput){
         
-        Vector3 playerVel = Vector3.zero; 
+        
         Vector3 corrHor = moveInput.x * Camera.main.transform.right;
         Vector3 corrVer = moveInput.y * Camera.main.transform.forward;
         Vector3 combinedInput = corrHor + corrVer;
         moveDirection = new Vector3(combinedInput.x,0f,0f * combinedInput.y).normalized;
        
-        // Calculate player rotation based on sphere's normal
+        // Calculate player rotation based on sphere's gravityNormal
         RaycastHit hitInfo;
         if (Physics.Raycast(transform.position + transform.up * 0.25f, -transform.up, out hitInfo, Mathf.Infinity))
         {
-            Vector3 normal  = hitInfo.normal;
+            gravityNormal  = hitInfo.normal;
 
-            Quaternion moveDirectionRotation = Quaternion.LookRotation(moveDirection);
-            transform.GetChild(0).localRotation = moveDirectionRotation;
+            //rotate body yaw to match direction
+            if(moveDirection.magnitude > 0f){
+                Quaternion moveDirectionRotation = Quaternion.LookRotation(moveDirection);
+                transform.GetChild(0).localRotation = moveDirectionRotation;
+            }
 
-            Quaternion targetRotation   = Quaternion.FromToRotation(transform.up, normal) * transform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+            //rotate all to match surface
+            Quaternion targetRotation   = Quaternion.FromToRotation(transform.up, gravityNormal) * transform.rotation;
+            transform.rotation =  targetRotation;//Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
 
             moveDirection   = transform.TransformDirection(moveDirection);
-
-
-             
-            
-            
-           
-
-            
-
-            
-
             //movement
             if(player.stateManager.GetIsGrounded()){
                 //acceleration & deceleration
-                playerVel   = Vector3.Lerp(lastFrameVelocity, moveDirection * moveSpeed, 15*Time.fixedDeltaTime );  
-                gravityVel  = Vector3.zero;                 
+                playerVel = Vector3.Lerp(lastFrameVelocity.magnitude * moveDirection, moveDirection * moveSpeed, 15*Time.fixedDeltaTime );
+                //gravityVel = gravityNormal * gravity * 0.1f;
+                              
             }
             else{
-                playerVel   = Vector3.Lerp(lastFrameVelocity, moveDirection * moveSpeed, 7*Time.fixedDeltaTime );
+                playerVel   = Vector3.Lerp(lastFrameVelocity.magnitude * moveDirection, moveDirection * moveSpeed, 7*Time.fixedDeltaTime );
 
-                gravityVel = lastFrameGravity.magnitude * -normal;                
-                gravityVel += (normal * gravity * (jumpFalloff-1) * Time.fixedDeltaTime);
-
-            }
-            
-
-
-
-            lastFrameVelocity = playerVel;
-            lastFrameGravity  = gravityVel;  
-        
-            // Apply the rotated velocity back to the rigidbody
-            player.playerRb.velocity = playerVel + gravityVel;
-
-
+                gravityVel = lastFrameGravity.magnitude * gravityNormal * Mathf.Sign(Vector3.Dot(gravityVel.normalized,gravityNormal.normalized)) ;                
+                gravityVel += (gravityNormal * gravity * (jumpFalloff-1) * Time.fixedDeltaTime) ;
+            }             
         }
-  
-        
-
-        return playerVel;
     }
 
+    private void CheckJumpCollider()
+    {
+        //Cut jump when release or when hitting something
+        RaycastHit hitinfo;
+        if( player.stateManager.GetIsJumping() && ( Physics.BoxCast(transform.position + transform.up * transform.localScale.y, new Vector3(0.35f,0.1f,0.35f), Vector3.up, out hitinfo, transform.rotation, 0.15f, groundLayer)))
+        {
+            CutJump(true);
+        }        
+    }
+
+    public void PerformJump(){
+        Debug.Log("Jump");
+        
+        gravityVel = gravityNormal * jumpForce;
+        Debug.Log(gravityVel.magnitude);
+        //playerVel += gravityNormal * jumpForce; 
+        lastFrameVelocity = playerVel;
+        lastFrameGravity  = gravityVel;   
+        player.playerRb.velocity = playerVel + gravityVel; 
+    }
+
+    public void CutJump(bool ColliderHit){
+
+        if( Vector3.Dot(gravityVel.normalized , gravityNormal.normalized) > 0f)
+        {           
+            player.stateManager.SetIsJumping(false);
+            
+            Debug.Log("Cut Jump");
+            if( ColliderHit){
+                gravityVel = gravityNormal * -0.1f;                             
+            }
+            else{
+                gravityVel = gravityVel * cutJumpHeight; 
+            }
+            lastFrameGravity  = gravityVel; 
+        }
+        player.playerRb.velocity = playerVel + gravityVel;
+    }
 }

@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Dash",
+                    "name": "Jump",
                     "type": "Button",
                     "id": "50cbf375-f2e6-48d0-ab8b-bdc37e15b08c",
                     "expectedControlType": "Button",
@@ -211,22 +211,22 @@
                 {
                     "name": "",
                     "id": "cd830fe4-3257-4e5c-af6b-286e057b4c34",
-                    "path": "<XInputController>/buttonEast",
+                    "path": "<XInputController>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Dash",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "f4c41586-4235-49ca-9d00-4cbf419c8e80",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Dash",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

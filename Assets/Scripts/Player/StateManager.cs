@@ -13,15 +13,21 @@ public class StateManager : MonoBehaviour
     private bool isWalking = false;
 
     private float CoyoteTime = 0.2f;
-    private float groundedRemember;
+    public float groundedRemember;
+    public bool groundedLastFrame = false;
 
     private void Start() {
         player = GetComponent<PlayerScript>();
     }
 
     private void FixedUpdate() {
+
+        groundedLastFrame = isGrounded;
+
         isGrounded  = CheckGroundedState();
         isWalking   = CheckWalkingState();
+
+        
     }
 
 
@@ -30,8 +36,9 @@ public class StateManager : MonoBehaviour
     {    
         RaycastHit hitinfo;
         Debug.DrawRay(transform.position + transform.up * 0.25f, -transform.up*0.25f, Color.blue);
-        if(Physics.BoxCast(transform.position + transform.up * 0.25f, new Vector3(0.4f,0.1f,0.4f), -transform.up, out hitinfo, transform.rotation, 0.25f, groundLayer))
+        if(Physics.SphereCast(transform.position + transform.up * 0.25f, 0.1f , -transform.up, out hitinfo, 0.2f, groundLayer))
         {
+            //SetIsJumping(false);
             Debug.DrawRay(transform.position + transform.up * 0.5f, -transform.up*0.5f, Color.red);
             groundedRemember = CoyoteTime;
             return true;
