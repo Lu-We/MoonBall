@@ -80,7 +80,7 @@ public class MovementManager : MonoBehaviour
        
         // Calculate player rotation based on sphere's gravityNormal
         RaycastHit hitInfo;
-        if (Physics.Raycast(transform.position + transform.up * 0.25f, -transform.up, out hitInfo, Mathf.Infinity))
+        if (Physics.Raycast(transform.position + transform.up * 0.25f, -transform.up, out hitInfo, Mathf.Infinity,groundLayer))
         {
             gravityNormal  = hitInfo.normal;
 
