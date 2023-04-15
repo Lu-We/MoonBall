@@ -24,10 +24,19 @@ public class StateManager : MonoBehaviour
 
         groundedLastFrame = isGrounded;
 
-        isGrounded  = CheckGroundedState();
+        isGrounded  = CheckGroundedState();  
+        
+
+
         isWalking   = CheckWalkingState();
 
         
+    }
+
+    private void LateUpdate() {
+        // if(groundedLastFrame == false && isGrounded == true && isJumping == true ){
+        //     player.stateManager.SetIsJumping(false);
+        // }
     }
 
 
@@ -61,6 +70,7 @@ public class StateManager : MonoBehaviour
     // Setter for isGrounded
     public void SetIsGrounded(bool value)
     {
+        groundedLastFrame = value;
         isGrounded = value;
     }
 

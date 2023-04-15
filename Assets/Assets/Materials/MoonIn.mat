@@ -52,5 +52,5 @@ Material:
     - _QueueOffset: 0
     m_Colors:
     - _Color: {r: 0.8113207, g: 0.7642099, b: 0.6620684, a: 0}
-    - _Emission: {r: 0, g: 0, b: 0, a: 0}
+    - _Emission: {r: 0, g: 0.018620733, b: 0.135, a: 1}
   m_BuildTextureStacks: []

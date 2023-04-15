@@ -44,6 +44,15 @@ public class MovementManager : MonoBehaviour
         MovePlayer(player.inputManager.GetMoveInput()); 
         CheckJumpCollider();
 
+
+        if(Vector3.Dot(gravityVel.normalized , gravityNormal.normalized) < 0f && player.stateManager.GetIsJumping() ){
+            player.stateManager.SetIsJumping(false);
+        }
+
+
+
+
+
         player.playerRb.velocity = playerVel + gravityVel;
 
         lastFrameGrounded = player.stateManager.GetIsGrounded();                    
@@ -81,11 +90,15 @@ public class MovementManager : MonoBehaviour
             if(player.stateManager.GetIsGrounded()){
                 //acceleration & deceleration
                 playerVel = Vector3.Lerp(lastFrameVelocity.magnitude * moveDirection, moveDirection * moveSpeed, 15*Time.fixedDeltaTime );
-                //gravityVel = gravityNormal * gravity * 0.1f;
+                
+                if(!player.stateManager.GetIsJumping()){
+                    gravityVel = gravityNormal * -0.1f;
+                    lastFrameGravity = gravityVel;
+                }
                               
             }
             else{
-                playerVel   = Vector3.Lerp(lastFrameVelocity.magnitude * moveDirection, moveDirection * moveSpeed, 7*Time.fixedDeltaTime );
+                playerVel   = Vector3.Lerp(lastFrameVelocity.magnitude * moveDirection, moveDirection * moveSpeed, 3*Time.fixedDeltaTime );
 
                 gravityVel = lastFrameGravity.magnitude * gravityNormal * Mathf.Sign(Vector3.Dot(gravityVel.normalized,gravityNormal.normalized)) ;                
                 gravityVel += (gravityNormal * gravity * (jumpFalloff-1) * Time.fixedDeltaTime) ;
