@@ -30,25 +30,5 @@
 		<property name="isExposedRecursively">
 			<value>false</value>
 		</property>
-		<relationship name="modulators">
-			<destination>{3693596d-83b1-4aa0-b265-836b0d0a4b01}</destination>
-		</relationship>
-	</object>
-	<object class="ADSRModulator" id="{3693596d-83b1-4aa0-b265-836b0d0a4b01}">
-		<property name="nameOfPropertyBeingModulated">
-			<value>cursorPosition</value>
-		</property>
-		<property name="attackTime">
-			<value>2600</value>
-		</property>
-		<property name="peakValue">
-			<value>100</value>
-		</property>
-		<property name="holdTime">
-			<value>1200</value>
-		</property>
-		<property name="releaseTime">
-			<value>0</value>
-		</property>
 	</object>
 </objects>

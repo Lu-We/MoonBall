@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public MusicManager musicManager;
+
     private PlayerScript player;
     private List<PlayerScript> players = new List<PlayerScript>();
 
@@ -23,10 +25,16 @@ public class GameManager : MonoBehaviour
 
     private float tenSec = 10f;
     private float nextEventTime = 0f;
+    private float nextEventTime1 = -1f;
+    private float nextEventTime2 = -2f;
+    private float nextEventTime3 = -3f;
 
     void Awake()
     {   
         nextEventTime = Time.time + tenSec;
+        nextEventTime1 += Time.time + tenSec;
+        nextEventTime2 += Time.time + tenSec;
+        nextEventTime3 += Time.time + tenSec;
         defaultFixedDeltaTime = Time.fixedDeltaTime;
         Instance = this;
 
@@ -43,9 +51,23 @@ public class GameManager : MonoBehaviour
 
         if(!gameStopped){
             if(Time.time >= nextEventTime){
+                musicManager.PlayCountdownFinalSFX();
                 MoonEvent(Random.Range(0,7));
                 nextEventTime = Time.time + tenSec;
             }
+            else if(Time.time >= nextEventTime1){
+                musicManager.PlayCountdownSFX();
+                nextEventTime1 = Time.time + tenSec;
+            }
+            else if(Time.time >= nextEventTime2){
+                musicManager.PlayCountdownSFX();
+                nextEventTime2 = Time.time + tenSec;
+            }
+            else if(Time.time >= nextEventTime3){
+                musicManager.PlayCountdownSFX();
+                nextEventTime3 = Time.time + tenSec;
+            }
+
             //Debug.Log("Player Count :" + players.Count);        
             CheckWinner();
         }
@@ -63,6 +85,15 @@ public class GameManager : MonoBehaviour
         players.Remove(player);
     }
 
+    private void CheckCaDingDong(){
+        if (musicManager.inThirdLayer) 
+            return;
+        foreach(PlayerScript p in players){
+            if(p.playerHealth.GetHealth() <= 0.4f * p.playerHealth.maxHealth){
+                musicManager.inThirdLayer = true;
+            }
+        }
+    }
     private void CheckWinner(){
         if(players.Count == 1){
             StopGame();
@@ -100,10 +131,12 @@ public class GameManager : MonoBehaviour
                 break;
             case 1: // speed up
                 Debug.Log("SpeedUp");
+                musicManager.TriggerSpeedParameter();
                 StartCoroutine(SpeedEvent(1.5f));
                 break;
             case 2: // slow down
                 Debug.Log("SpeedDown");
+                musicManager.PlaySlowdownSFX();
                 StartCoroutine(SpeedEvent(0.5f));
                 break;
             case 3:  // Deadly ball (can't retourner)
@@ -115,6 +148,7 @@ public class GameManager : MonoBehaviour
                 ball1.GetComponent<DeadlyBall>().SetMoon(moon);
                 ball1.GetComponent<DeadlyBall>().SetCurve(Random.Range(0,3));
                 if(Random.Range(0f,1f) >= 0.5f) ball1.GetComponent<DeadlyBall>().ChangeDirection();
+                StartCoroutine(DeadlyBall());
                 break;
             case 4:  // change ball direction + spawn random raquette
                 Debug.Log("ChangeDir+Raquette");
@@ -172,14 +206,21 @@ public class GameManager : MonoBehaviour
             speeds[idx] = b.ballSpeed;
             b.SetMaxSpeed();
             idx++;
-        }                
+        }     
+        //musicManager.inThirdLayer = true;           
         yield return new WaitForSecondsRealtime(9.5f);
-
+       // musicManager.inThirdLayer = false;  
         idx = 0;
         foreach(Ball b in balls){
             b.SetSpeed(speeds[idx]);
             idx++;
         }
+    }
+
+    public IEnumerator DeadlyBall(){
+        musicManager.inSecondLayer = true;
+        yield return new WaitForSecondsRealtime(9.5f);
+        musicManager.inSecondLayer = false;
     }
 
    

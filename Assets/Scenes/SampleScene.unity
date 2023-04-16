@@ -814,6 +814,8 @@ GameObject:
   m_Component:
   - component: {fileID: 115953418}
   - component: {fileID: 115953417}
+  - component: {fileID: 115953419}
+  - component: {fileID: 115953420}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -833,6 +835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07a873d076709c4b97be4f1a501e7d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicManager: {fileID: 115953419}
   winCamPrefab: {fileID: 4649550524191063948, guid: 32b74b1a7dc8de6428cb38e4c292576f,
     type: 3}
   moon: {fileID: 1138385926}
@@ -857,6 +860,67 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &115953419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115953416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc77b1e8109ef524c9bf3be86697ef08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music:
+    Guid:
+      Data1: 988095953
+      Data2: 1322187942
+      Data3: -751745406
+      Data4: -224618825
+    Path: event:/Music
+  inFirstLayer: 1
+  inSecondLayer: 0
+  inThirdLayer: 0
+  incFactor: 10
+  decFactor: 10
+  CoutdownSound:
+    Guid:
+      Data1: 1310208516
+      Data2: 1126035629
+      Data3: -1924544332
+      Data4: 1743573486
+    Path: event:/UI/UI_Countdown
+  CoutdownFinalSound:
+    Guid:
+      Data1: 1822366856
+      Data2: 1132329685
+      Data3: 224846234
+      Data4: -983681001
+    Path: event:/UI/UI_Countdown_Last
+  SlowdownSound:
+    Guid:
+      Data1: 873938837
+      Data2: 1147613911
+      Data3: -939131970
+      Data4: 1263070984
+    Path: event:/Slow
+--- !u!114 &115953420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115953416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b0e04e2572f9a940a47465f6f3c2f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Parameter: SpeedUp
+  TriggerEvent: 1
+  Value: 0
 --- !u!1 &219746078
 GameObject:
   m_ObjectHideFlags: 0
@@ -2545,7 +2609,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1138385926}
   - component: {fileID: 1138385927}
-  - component: {fileID: 1138385928}
   m_Layer: 0
   m_Name: Moon
   m_TagString: Untagged
@@ -2582,42 +2645,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attenuationObject: {fileID: 0}
---- !u!114 &1138385928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1138385925}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 988095953
-      Data2: 1322187942
-      Data3: -751745406
-      Data4: -224618825
-    Path: event:/Ball/Music
-  Event: 
-  PlayEvent: 1
-  StopEvent: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params:
-  - Name: music_Layer1
-    Value: 0
-  - Name: music_Layer2
-    Value: 0
-  - Name: music_Layer3
-    Value: 0
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &1169918181
 GameObject:
   m_ObjectHideFlags: 0

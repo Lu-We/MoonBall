@@ -8,8 +8,8 @@ public class PlayerHealth : MonoBehaviour
     internal PlayerScript player;
     [SerializeField]
     private float health = 100f;
-    [SerializeField]
-    private float maxHealth = 100f;
+
+    public float maxHealth = 100f;
 
     public Vector3 hitNormal;
 

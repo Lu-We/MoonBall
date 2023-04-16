@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3700821136670514416}
   - component: {fileID: 3700821136670514377}
   - component: {fileID: 7070343495537676213}
+  - component: {fileID: 6096061743878020503}
   m_Layer: 0
   m_Name: DeadlyBall
   m_TagString: DeadlyBall
@@ -248,3 +249,33 @@ MonoBehaviour:
   curve2: 30
   curve3: 33
   lerpSpeed: 1
+--- !u!114 &6096061743878020503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3700821136670514417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1877037081
+      Data2: 1189131283
+      Data3: 723771821
+      Data4: -1741463328
+    Path: event:/Ball/ball_Spike
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
