@@ -48,8 +48,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _NoiseScale: 4000
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Smooth: 0.1
+    - _metallic: 0
     m_Colors:
     - _Color: {r: 0.8113207, g: 0.7642099, b: 0.6620684, a: 0}
     - _Emission: {r: 0, g: 0.018620733, b: 0.135, a: 1}

@@ -33,7 +33,7 @@ public class InputManager : MonoBehaviour
 
     public PlayerControls CreateControls()
     {
-        controls = new PlayerControls();
+        controls = new PlayerControls(); 
 
         controls.Player.Move.performed += ctx => OnMove(ctx);
         controls.Player.Move.canceled  += ctx => OnStop(ctx);
@@ -72,7 +72,7 @@ public class InputManager : MonoBehaviour
         CheckDash();
 
         if(moveInput.y < -0.2f){
-            Debug.Log("Crouch");
+            //Debug.Log("Crouch");
             player.stateManager.SetIsCrouching(true);
         }else{
             player.stateManager.SetIsCrouching(false);

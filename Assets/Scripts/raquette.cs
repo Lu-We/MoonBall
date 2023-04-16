@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EZCameraShake;
 
 public class raquette : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class raquette : MonoBehaviour
             
             ballHit.Accelerate(5f);
             ballHit.ChangeDirection();
+
+            StartCoroutine(CameraShake.Instance.Shake(0.05f, 0.5f));
         }
     }
 }
