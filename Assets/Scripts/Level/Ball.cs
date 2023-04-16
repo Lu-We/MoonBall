@@ -138,7 +138,7 @@ public class Ball : MonoBehaviour
                 return;
             player.playerHealth.hitNormal = myRb.velocity;
             player.playerHealth.InflictDamage( ballSpeed / 10f * damageMultiply);
-            Debug.Log(player.playerHealth.GetHealth());
+            //Debug.Log(player.playerHealth.GetHealth());
         }
     }
     

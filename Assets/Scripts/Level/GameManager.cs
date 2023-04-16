@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     private PlayerScript player;
     private List<PlayerScript> players = new List<PlayerScript>();
+
+    private AsyncOperation asyncLoad;
 
     public GameObject winCamPrefab;
     private GameObject winCam;
@@ -57,7 +60,7 @@ public class GameManager : MonoBehaviour
         defaultFixedDeltaTime = Time.fixedDeltaTime;
         Instance = this;
 
-        
+        StartCoroutine(LoadYourAsyncScene());
         DisableMoonsUI();
 
         var playersarr = FindObjectsOfType<PlayerScript>();
@@ -148,6 +151,8 @@ public class GameManager : MonoBehaviour
 
         players[0].inputManager.enabled = false;
         players[0].movementManager.enabled = false;
+        StartCoroutine(LaunchLevel());
+        
     }
 
     private void MoonEvent(int eventId){
@@ -272,5 +277,23 @@ public class GameManager : MonoBehaviour
         musicManager.inSecondLayer = false;
     }
 
-   
+    IEnumerator LoadYourAsyncScene()
+    {
+		yield return new WaitForSeconds(0.2f);
+
+        asyncLoad = SceneManager.LoadSceneAsync("StartMenu");
+		asyncLoad.allowSceneActivation = false;
+
+       
+        while (!asyncLoad.isDone)
+        {
+			Debug.Log("Pro :" + asyncLoad.progress);
+            yield return null;
+        }
+    }
+
+	IEnumerator LaunchLevel(){
+		yield return new WaitForSeconds(4f);
+		asyncLoad.allowSceneActivation = true;
+	}
 }

@@ -6,6 +6,13 @@ using UnityEngine.UI;
 public class PlayerHealth : MonoBehaviour
 {
     internal PlayerScript player;
+
+    private Material baseMat;
+    private Material[] mats;
+
+    [SerializeField]
+    private Material blinkMat;
+
     [SerializeField]
     private float health = 100f;
 
@@ -20,6 +27,8 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         player = GetComponent<PlayerScript>();
+        mats = player.prenderer.materials;
+        baseMat = mats[0];
     }
 
     private void Update() {
@@ -29,6 +38,7 @@ public class PlayerHealth : MonoBehaviour
     public void InflictDamage(float amount){
         health -= amount;
         Mathf.Clamp(health,0,maxHealth);
+        StartCoroutine(blink());
         CheckStatus();
     }
 
@@ -43,12 +53,12 @@ public class PlayerHealth : MonoBehaviour
 
     private void CheckStatus(){
         if(health <= 0.3f * maxHealth){
-            Debug.Log("LowHealth");
+            //Debug.Log("LowHealth");
             healthBar.color = lowHealth;
         }
 
         if(health <= 0f ){
-            Debug.Log("Dead");
+            //Debug.Log("Dead");
             player.audioManager.PlayDeathSFX();
             
             
@@ -66,6 +76,33 @@ public class PlayerHealth : MonoBehaviour
             GameManager.Instance.RemovePlayer(player,3f);
             Destroy(gameObject,5f);
         }
+    }
+
+    public IEnumerator blink(){
+        float elapsedTime = 0f;
+        float waitTime = 0.02f; 
+        bool blink = true;
+        while (elapsedTime < waitTime)
+        {
+            elapsedTime += Time.fixedDeltaTime;
+            if(blink){
+                mats[0] = blinkMat;
+                player.prenderer.materials= mats;
+            }
+            else{
+                mats[0] = baseMat;
+                player.prenderer.materials = mats;
+            }
+            blink = !blink;
+            // Yield here
+            yield return new WaitForSeconds(0.07f);
+        }  
+        // Make sure we got there
+       
+        mats[0] = baseMat;
+        player.prenderer.materials = mats;
+
+        yield return new WaitForSeconds(8f);
     }
 
 }
