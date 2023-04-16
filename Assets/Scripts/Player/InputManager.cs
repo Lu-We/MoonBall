@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour
     internal PlayerControls controls;
     public Vector2 moveInput;
 
+    public GameObject raquetteprefab;
         //Jump Buffers
     private float jumpPressedRememberTime = 0.2f;
     private float jumpPressedRemember;
@@ -19,8 +20,14 @@ public class InputManager : MonoBehaviour
     private float dashPressedRememberTime = 0.2f;
     private float dashPressedRemember;
 
+    private bool isReversed = false;
+
     private void Start() {
         player = GetComponent<PlayerScript>();
+        if(player.GetPlayerIndex() == 1 ){
+            isReversed = true;
+        }
+
     }
 
 
@@ -28,16 +35,22 @@ public class InputManager : MonoBehaviour
     {
         controls = new PlayerControls();
 
-        controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        controls.Player.Move.canceled  += ctx => moveInput = Vector2.zero;
+        controls.Player.Move.performed += ctx => OnMove(ctx);
+        controls.Player.Move.canceled  += ctx => OnStop(ctx);
 
         controls.Player.Jump.performed += ctx => JumpPressed();
         controls.Player.Jump.canceled  += ctx => JumpCanceled();
 
         controls.Player.Dash.performed += ctx => DashPressed();   
 
-        controls.Player.Attack.performed += ctx => AttackPressed();
-        controls.Player.Attack.canceled += ctx => Attackcanceled();   
+        controls.Player.AttackUp.performed += ctx => AttackUpPressed();
+        //controls.Player.AttackUp.canceled += ctx => AttackUpcanceled();
+
+        controls.Player.AttackMid.performed += ctx => AttackMidPressed();
+       // controls.Player.AttackMid.canceled += ctx => AttackMidcanceled();   
+
+        controls.Player.AttackDown.performed += ctx => AttackDownPressed();
+        //controls.Player.AttackDown.canceled += ctx => AttackDowncanceled();   
 
         return controls;
     }
@@ -47,7 +60,9 @@ public class InputManager : MonoBehaviour
     }
 
     private void OnDisable() {
-        controls.Player.Disable();
+        if(controls != null){
+            controls.Player.Disable();
+        }
     }
     
 
@@ -62,6 +77,14 @@ public class InputManager : MonoBehaviour
         }else{
             player.stateManager.SetIsCrouching(false);
         }
+    }
+
+    private void OnMove(CallbackContext ctx){
+        moveInput = isReversed? -ctx.ReadValue<Vector2>() : ctx.ReadValue<Vector2>();
+    }
+
+    private void OnStop(CallbackContext ctx){
+        moveInput = moveInput = Vector2.zero;
     }
 
     private void DashPressed(){
@@ -120,25 +143,41 @@ public class InputManager : MonoBehaviour
 
     }
 
-    private void AttackPressed(){
+    private void AttackUpPressed(){
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position+transform.up*2, 8f);
-        foreach(var other in hitColliders){
-            if(other.CompareTag("Ball")){
-                Ball ballHit = other.GetComponent<Ball>();
-                ballHit.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                ballHit.SetCurve(2);           
-                
-                ballHit.Accelerate(5f);
-                ballHit.ChangeDirection();
-            }
-        }
+        Debug.Log("AttackUp");
+        GameObject hitbox;
+        Vector3 offset ;
+        int curve;
+        offset = new Vector3(0, 3, 0);
+        curve = 2;
+        
 
-        player.GetComponent<ParticleSystem>().Play();
+        hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
+        hitbox.GetComponent<raquette>().InitRaquette(offset,8,.15f,curve);
     }
 
-    private void Attackcanceled(){
-        player.raquette.SetActive(false);
+    private void AttackMidPressed(){
+        Debug.Log("AttackMid");
+        GameObject hitbox;
+        Vector3 offset = new Vector3(0, 2, 0);
+        hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
+        hitbox.GetComponent<raquette>().InitRaquette(offset,8,0.15f,1);
     }
+
+    private void AttackDownPressed(){
+        Debug.Log("AttackDown");
+        GameObject hitbox;
+        Vector3 offset;
+        int curve;
+
+        offset = new Vector3(0, 1, 0);
+        curve = 0;
+  
+        hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
+        hitbox.GetComponent<raquette>().InitRaquette(offset,8,.15f,curve);
+
+    }
+
 
 }

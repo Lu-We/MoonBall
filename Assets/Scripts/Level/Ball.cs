@@ -23,13 +23,16 @@ public class Ball : MonoBehaviour
     public float lerpSpeed = 5f;
 
     private float offset = 27f;
+    private float damageMultiply = 1f;
 
     private Renderer myrenderer;
+    private Rigidbody myRb;
 
     // Start is called before the first frame update
     void Start()
     {
         myrenderer = GetComponent<Renderer>();
+        myRb = transform.GetComponent<Rigidbody>();
     }
 
     private void Update() {
@@ -61,21 +64,37 @@ public class Ball : MonoBehaviour
         transform.position = gravityUp * offset;
 
         
-        transform.GetComponent<Rigidbody>().velocity = transform.forward * ballSpeed;
+        myRb.velocity = transform.forward * ballSpeed;
+    }
+
+    public void SetMoon(Transform m){
+        moon = m;
     }
 
     public void SetCurve(int number){
         curveNr = number;
     }
 
+    public void SetDamageMultiply(float factor){
+        damageMultiply = factor;
+    }
+
     public void Accelerate(float amount){
-        ballSpeed *= 1.1f;
+        ballSpeed *= 1.05f;
         ballSpeed = Mathf.Clamp(ballSpeed,minSpeed, maxSpeed);
     }
 
     public void Deccelerate(float amount){
          ballSpeed /= 1.1f;
          ballSpeed = Mathf.Clamp(ballSpeed,minSpeed, maxSpeed);
+    }
+
+    public void SetMaxSpeed(){
+        ballSpeed = maxSpeed;
+    }
+
+    public void SetSpeed(float speed){
+        ballSpeed = speed;
     }
 
     public void ChangeDirection(){        
@@ -98,7 +117,8 @@ public class Ball : MonoBehaviour
             PlayerScript player = other.GetComponentInParent<PlayerScript>();
             if(player == null)
                 return;
-            player.playerHealth.InflictDamage( ballSpeed / 10f );
+            player.playerHealth.hitNormal = myRb.velocity;
+            player.playerHealth.InflictDamage( ballSpeed / 10f * damageMultiply);
             Debug.Log(player.playerHealth.GetHealth());
         }
     }

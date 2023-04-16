@@ -41,8 +41,8 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    public void PlayDeathSFX(Transform transform){
-        FMODUnity.RuntimeManager.PlayOneShot(DeathSound, transform.position);
+    public void PlayDeathSFX(){
+        FMODUnity.RuntimeManager.PlayOneShot(DeathSound, player.transform.position);
     }
 
     public void PlayLevelCompletedSFX(Transform transform){

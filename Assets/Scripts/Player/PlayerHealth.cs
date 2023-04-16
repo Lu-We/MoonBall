@@ -11,6 +11,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField]
     private float maxHealth = 100f;
 
+    public Vector3 hitNormal;
+
     public Color lowHealth;
 
     public Image healthBar;
@@ -47,10 +49,22 @@ public class PlayerHealth : MonoBehaviour
 
         if(health <= 0f ){
             Debug.Log("Dead");
-            player.audioManager.PlayDeathSFX(player.transform);
-            GameManager.Instance.RemovePlayer(player);
-            Destroy(gameObject,.5f);
-            //LaunchDeadSequence
+            player.audioManager.PlayDeathSFX();
+            
+            
+            player.inputManager.enabled = false;
+            player.movementManager.enabled = false;
+
+            player.playerRb.constraints = RigidbodyConstraints.None;
+            player.playerRb.AddForce(hitNormal , ForceMode.Impulse);
+
+            Vector3 torque;
+            torque.x = Random.Range (-5, 5);
+            torque.y = Random.Range (-5, 5);
+            torque.z = Random.Range (-5, 5);
+            player.GetComponent<ConstantForce>().torque = torque;
+            GameManager.Instance.RemovePlayer(player,3f);
+            Destroy(gameObject,5f);
         }
     }
 

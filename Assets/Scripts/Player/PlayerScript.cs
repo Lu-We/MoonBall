@@ -13,7 +13,6 @@ public class PlayerScript : MonoBehaviour
     internal AudioManager audioManager;
     internal PlayerHealth playerHealth;
     public Rigidbody playerRb;
-    public GameObject raquette;
     public CapsuleCollider hurtbox;
 
  
