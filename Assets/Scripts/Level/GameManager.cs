@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,24 @@ public class GameManager : MonoBehaviour
 
     public GameObject winCamPrefab;
     private GameObject winCam;
+
+    [SerializeField]
+    private Image moon1;
+    [SerializeField]
+    private Image moon2;
+    [SerializeField]
+    private Image moon3;
+    [SerializeField]
+    private Image moon4;
+    [SerializeField]
+    private Image moon5;
+    [SerializeField]
+    private Image moon6;
+    [SerializeField]
+    private Image moon7;
+    [SerializeField]
+    private Image moonBlood;
+
 
     private bool gameStopped = false;
 
@@ -38,10 +57,24 @@ public class GameManager : MonoBehaviour
         defaultFixedDeltaTime = Time.fixedDeltaTime;
         Instance = this;
 
+        
+        DisableMoonsUI();
+
         var playersarr = FindObjectsOfType<PlayerScript>();
         foreach(var p in playersarr){
             players.Add(p);
         }
+    }
+
+    private void DisableMoonsUI(){
+        moon1.enabled = false;
+        moon2.enabled = false;
+        moon3.enabled = false;
+        moon4.enabled = false;
+        moon5.enabled = false;
+        moon6.enabled = false;
+        moon7.enabled = false;
+        moonBlood.enabled = false;
     }
 
 
@@ -51,8 +84,9 @@ public class GameManager : MonoBehaviour
 
         if(!gameStopped){
             if(Time.time >= nextEventTime){
+                DisableMoonsUI();
                 musicManager.PlayCountdownFinalSFX();
-                MoonEvent(Random.Range(0,7));
+                MoonEvent(4);//Random.Range(0,7));
                 nextEventTime = Time.time + tenSec;
             }
             else if(Time.time >= nextEventTime1){
@@ -121,6 +155,7 @@ public class GameManager : MonoBehaviour
 
         switch(eventId){
             case 0: // Ajout de ball
+                moon1.enabled = true;
                 Debug.Log("AddBall");
                 Vector3 randomVector = new Vector3(Random.Range(0,1f),Random.Range(0,1f),0f).normalized * 50f; 
                 var ball = Instantiate(ballPrefab, moon.position + randomVector, Quaternion.LookRotation(randomVector,Vector3.up) );
@@ -130,16 +165,19 @@ public class GameManager : MonoBehaviour
 
                 break;
             case 1: // speed up
+                moon2.enabled = true;
                 Debug.Log("SpeedUp");
                 musicManager.TriggerSpeedParameter();
                 StartCoroutine(SpeedEvent(1.5f));
                 break;
             case 2: // slow down
+                moon3.enabled = true;
                 Debug.Log("SpeedDown");
                 musicManager.PlaySlowdownSFX();
                 StartCoroutine(SpeedEvent(0.5f));
                 break;
             case 3:  // Deadly ball (can't retourner)
+                moonBlood.enabled = true;
                 Debug.Log("SpawnDeadlyBall");
                 Vector3 randomVector1 = new Vector3(Random.Range(0,1f),Random.Range(0,1f),0f).normalized * 50f; 
                 var ball1 = Instantiate(deadlyBallPrefab, moon.position + randomVector1, Quaternion.LookRotation(randomVector1,Vector3.up) );
@@ -151,6 +189,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(DeadlyBall());
                 break;
             case 4:  // change ball direction + spawn random raquette
+                moon5.enabled = true;
                 Debug.Log("ChangeDir+Raquette");
                 foreach(Ball b in balls){
                     b.ChangeDirection();
@@ -158,19 +197,21 @@ public class GameManager : MonoBehaviour
                 GameObject hitbox;
                 int curve = Random.Range(0,3);
                 Vector3 offset = new Vector3(curve * 4f, 0, 0);
-                Vector3 position = (moon.transform.position + moon.transform.right * 27f) + offset;
-
+                Vector3 position = (moon.transform.position + moon.transform.right) * 27f;
+                Vector3 position2 = (moon.transform.position + moon.transform.right) * -27f;
         
-                hitbox = Instantiate(raquettePrefab, position, Quaternion.identity);
+                hitbox = Instantiate(raquettePrefab, position, Quaternion.LookRotation(position,Vector3.up));
                 hitbox.GetComponent<raquette>().InitRaquette(offset, 5, 10f, curve);
-                hitbox = Instantiate(raquettePrefab, -position, Quaternion.identity);
-                hitbox.GetComponent<raquette>().InitRaquette(offset, 5, 10f, curve);
+                hitbox = Instantiate(raquettePrefab, position2, Quaternion.LookRotation(position2,-Vector3.up));
+                hitbox.GetComponent<raquette>().InitRaquette(-offset, 5, 10f, curve);
                 break;
             case 5: // Set all ball max speed
+                moon6.enabled = true;
                 Debug.Log("Max Speed");
                 StartCoroutine(MaxSpeedEvent(balls));
                 break;
             case 6: // Double damage time
+                moon7.enabled = true;
                 Debug.Log("Double Damage");
                 StartCoroutine(DoubleDamageEvent(balls));
                 break;
@@ -184,6 +225,14 @@ public class GameManager : MonoBehaviour
         Time.timeScale = factor;
         Time.fixedDeltaTime = Time.timeScale * defaultFixedDeltaTime;
         yield return new WaitForSecondsRealtime(9.5f);
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = defaultFixedDeltaTime; 
+    }
+
+    public IEnumerator HitStop(float factor, float duration){
+        Time.timeScale = factor;
+        Time.fixedDeltaTime = Time.timeScale * defaultFixedDeltaTime;
+        yield return new WaitForSecondsRealtime(duration);
         Time.timeScale = 1f;
         Time.fixedDeltaTime = defaultFixedDeltaTime; 
     }

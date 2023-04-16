@@ -12,6 +12,9 @@ public class AudioManager : MonoBehaviour
     public FMODUnity.EventReference StepSound;
     public FMODUnity.EventReference DeathSound;
     public FMODUnity.EventReference LevelCompletedSound;
+    public FMODUnity.EventReference AttackUp;
+    public FMODUnity.EventReference AttackMid;
+    public FMODUnity.EventReference AttackDown;
 
     public float stepSoundPeriod = 0.2f;
     public float stepSoundTimer = 0f;
@@ -43,6 +46,18 @@ public class AudioManager : MonoBehaviour
 
     public void PlayDeathSFX(){
         FMODUnity.RuntimeManager.PlayOneShot(DeathSound, player.transform.position);
+    }
+
+    public void PlayAttackUpSFX(){
+        FMODUnity.RuntimeManager.PlayOneShot(AttackUp, player.transform.position);
+    }
+
+    public void PlayAttackMidSFX(){
+        FMODUnity.RuntimeManager.PlayOneShot(AttackMid, player.transform.position);
+    }
+
+    public void PlayAttackDownSFX(){
+        FMODUnity.RuntimeManager.PlayOneShot(AttackDown, player.transform.position);
     }
 
     public void PlayLevelCompletedSFX(Transform transform){

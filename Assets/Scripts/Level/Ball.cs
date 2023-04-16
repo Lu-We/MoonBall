@@ -39,7 +39,19 @@ public class Ball : MonoBehaviour
     }
 
     private void Update() {
+        //ResetZRot();
         CheckMaxSpeedReach();
+    }
+
+    private void ResetZRot(){
+        // Get the current local rotation
+        Quaternion currentRotation = transform.localRotation;
+
+        // Set the Z-axis rotation to 0
+        currentRotation = Quaternion.Euler(currentRotation.eulerAngles.x , 90f, currentRotation.eulerAngles.z);
+
+        // Set the updated local rotation back to the game object
+        transform.localRotation = currentRotation;
     }
 
     // Update is called once per frame

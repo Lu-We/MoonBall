@@ -15,7 +15,7 @@ public class CameraShake : MonoBehaviour
     {
 
         float elapsed = 0.0f;
-
+        StartCoroutine(GameManager.Instance.HitStop(0.05f,duration));
         while ( elapsed < duration){
             float x = Random.Range(-1f,1f) * magnitude ;
             float y = Random.Range(-1f,1f) * magnitude ;

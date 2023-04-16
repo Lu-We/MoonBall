@@ -145,7 +145,7 @@ public class InputManager : MonoBehaviour
 
     private void AttackUpPressed(){
         player.animator.SetBool("AttackUp",true);
-        Debug.Log("AttackUp");
+        player.audioManager.PlayAttackUpSFX();
         GameObject hitbox;
         Vector3 offset ;
         int curve;
@@ -160,8 +160,9 @@ public class InputManager : MonoBehaviour
     }
 
     private void AttackMidPressed(){
-        Debug.Log("AttackMid");
+        //Debug.Log("AttackMid");
         player.animator.SetBool("AttackMid",true);
+        player.audioManager.PlayAttackMidSFX();
         GameObject hitbox;
         Vector3 offset = new Vector3(0, 2, 0);
         hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
@@ -171,8 +172,9 @@ public class InputManager : MonoBehaviour
     }
 
     private void AttackDownPressed(){
-        Debug.Log("AttackDown");
+        //Debug.Log("AttackDown");
         player.animator.SetBool("AttackDown",true);
+        player.audioManager.PlayAttackDownSFX();
         GameObject hitbox;
         Vector3 offset;
         int curve;
