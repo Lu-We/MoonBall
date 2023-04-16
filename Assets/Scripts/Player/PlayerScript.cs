@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {    
+    [SerializeField]
+    private int playerIndex = 0;
+
     internal MovementManager movementManager;
     internal InputManager inputManager;
     internal StateManager stateManager;
@@ -26,7 +29,9 @@ public class PlayerScript : MonoBehaviour
         playerHealth    = GetComponent<PlayerHealth>();
     }  
 
- 
+    public int GetPlayerIndex(){
+        return playerIndex;
+    }
     private void FixedUpdate()
     {
         // Detect ground surface

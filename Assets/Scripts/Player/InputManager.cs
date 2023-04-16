@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 public class InputManager : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class InputManager : MonoBehaviour
     }
 
 
-    void Awake()
+    public PlayerControls CreateControls()
     {
         controls = new PlayerControls();
 
@@ -37,6 +38,8 @@ public class InputManager : MonoBehaviour
 
         controls.Player.Attack.performed += ctx => AttackPressed();
         controls.Player.Attack.canceled += ctx => Attackcanceled();   
+
+        return controls;
     }
 
     private void OnEnable() {
@@ -46,6 +49,7 @@ public class InputManager : MonoBehaviour
     private void OnDisable() {
         controls.Player.Disable();
     }
+    
 
     void FixedUpdate()
     {   
@@ -130,7 +134,7 @@ public class InputManager : MonoBehaviour
             }
         }
 
-        player.raquette.SetActive(true);
+        player.GetComponent<ParticleSystem>().Play();
     }
 
     private void Attackcanceled(){
