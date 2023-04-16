@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="MixerGroup" id="{e58a10fb-552b-4e00-b2f0-b4995ec5cbb6}">
+		<property name="name">
+			<value>ALL</value>
+		</property>
+		<relationship name="automators">
+			<destination>{6cb9a11b-0e6c-4f3b-863e-9c7985b06999}</destination>
+		</relationship>
+		<relationship name="modulators">
+			<destination>{33b4a8f9-9668-4b39-81c2-074b3af1693b}</destination>
+		</relationship>
+		<relationship name="effectChain">
+			<destination>{666f5ade-7714-473b-9fb9-7e8a6de6280d}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{5166d7e7-1a85-4aa4-bce6-79e658d43c0f}</destination>
+		</relationship>
+		<relationship name="output">
+			<destination>{a66ce42b-d116-48a5-ad16-740cb799e132}</destination>
+		</relationship>
+	</object>
+	<object class="Automator" id="{6cb9a11b-0e6c-4f3b-863e-9c7985b06999}">
+		<property name="nameOfPropertyBeingAutomated">
+			<value>pitch</value>
+		</property>
+		<relationship name="automationCurves">
+			<destination>{27dc7039-1ffc-486c-9ab2-b45aa545379e}</destination>
+		</relationship>
+	</object>
+	<object class="SidechainModulator" id="{33b4a8f9-9668-4b39-81c2-074b3af1693b}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>pitch</value>
+		</property>
+		<property name="amount">
+			<value>-26</value>
+		</property>
+		<property name="attackTime">
+			<value>88</value>
+		</property>
+		<property name="releaseTime">
+			<value>740</value>
+		</property>
+		<property name="minimumThreshold">
+			<value>-80</value>
+		</property>
+		<property name="maximumThreshold">
+			<value>-27.3999996</value>
+		</property>
+		<relationship name="sidechains">
+			<destination>{9b891d0a-14d3-4e29-bf9f-e6de7efdf2bd}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{666f5ade-7714-473b-9fb9-7e8a6de6280d}">
+		<relationship name="effects">
+			<destination>{489c6f71-95a6-402d-a2f4-322d75a476d1}</destination>
+			<destination>{03998c17-62b7-4bf5-b70c-acdaf4703290}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{5166d7e7-1a85-4aa4-bce6-79e658d43c0f}" />
+	<object class="AutomationCurve" id="{27dc7039-1ffc-486c-9ab2-b45aa545379e}">
+		<relationship name="parameter">
+			<destination>{9a8f7179-fe12-4028-ae96-0151334e6dc6}</destination>
+		</relationship>
+		<relationship name="automationPoints">
+			<destination>{30bd7232-8777-4829-b09f-e96a6ac3a7c4}</destination>
+			<destination>{cba4b9ec-48a2-4560-83fd-dbfff37b1aa3}</destination>
+		</relationship>
+	</object>
+	<object class="LowpassEffect" id="{489c6f71-95a6-402d-a2f4-322d75a476d1}">
+		<property name="cutoff">
+			<value>22000</value>
+		</property>
+		<relationship name="modulators">
+			<destination>{5000e504-392c-43ee-be5d-b232d28e7282}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusFader" id="{03998c17-62b7-4bf5-b70c-acdaf4703290}" />
+	<object class="AutomationPoint" id="{30bd7232-8777-4829-b09f-e96a6ac3a7c4}">
+		<property name="position">
+			<value>0</value>
+		</property>
+		<property name="value">
+			<value>0</value>
+		</property>
+	</object>
+	<object class="AutomationPoint" id="{cba4b9ec-48a2-4560-83fd-dbfff37b1aa3}">
+		<property name="position">
+			<value>1</value>
+		</property>
+		<property name="value">
+			<value>24</value>
+		</property>
+	</object>
+	<object class="SidechainModulator" id="{5000e504-392c-43ee-be5d-b232d28e7282}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>cutoff</value>
+		</property>
+		<property name="amount">
+			<value>-60</value>
+		</property>
+		<property name="attackTime">
+			<value>75</value>
+		</property>
+		<property name="releaseTime">
+			<value>660</value>
+		</property>
+		<property name="minimumThreshold">
+			<value>-66</value>
+		</property>
+		<property name="maximumThreshold">
+			<value>-23.3999996</value>
+		</property>
+		<relationship name="sidechains">
+			<destination>{9b891d0a-14d3-4e29-bf9f-e6de7efdf2bd}</destination>
+		</relationship>
+	</object>
+</objects>
