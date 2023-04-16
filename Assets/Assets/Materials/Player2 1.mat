@@ -36,7 +36,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Emission: 0
-    - _FresnelPower: 0.6
+    - _FresnelPower: 3
     - _Metalic: 0
     - _QueueControl: 0
     - _QueueOffset: 0

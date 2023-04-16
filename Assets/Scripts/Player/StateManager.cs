@@ -40,6 +40,14 @@ public class StateManager : MonoBehaviour
 
         HandleCrouchState();
 
+
+        player.animator.SetBool("isDashing",isDashing);
+        player.animator.SetBool("isGrounded",isGrounded);
+        player.animator.SetBool("isWalking",isWalking);
+        player.animator.SetBool("isCrouching",isCrouching);
+        player.animator.SetBool("isJumping",isJumping);
+        player.animator.SetBool("isFalling",isFalling);
+
     }
 
     private void HandleCrouchState(){

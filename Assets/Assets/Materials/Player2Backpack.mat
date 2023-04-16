@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TranspMat
-  m_Shader: {fileID: -6465566751694194690, guid: 56b3b8c98a12376449ee524610511f78,
+  m_Name: Player2Backpack
+  m_Shader: {fileID: -6465566751694194690, guid: 4df7fb6d9cf735248a2b8c0736346f96,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -35,18 +35,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.2
-    - _Emission: 4
-    - _FresnelPower: 1.48
+    - _Emission: 0
+    - _FresnelPower: 3
     - _Metalic: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 0
     m_Colors:
-    - _FresnelColor: {r: 0.98852336, g: 1, b: 0.6179246, a: 0}
-    - _MainColor: {r: 0, g: 0, b: 0, a: 0}
+    - _FresnelColor: {r: 0, g: 0, b: 0, a: 0}
+    - _MainColor: {r: 0.9811321, g: 0.1137985, b: 0.013883919, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &6077212269611108635
+--- !u!114 &7960838758321521283
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -12,6 +12,8 @@ public class PlayerScript : MonoBehaviour
     internal StateManager stateManager;
     internal AudioManager audioManager;
     internal PlayerHealth playerHealth;
+    [SerializeField]
+    internal Animator animator;
     public Rigidbody playerRb;
     public CapsuleCollider hurtbox;
 
@@ -26,6 +28,7 @@ public class PlayerScript : MonoBehaviour
         stateManager    = GetComponent<StateManager>();
         audioManager    = GetComponent<AudioManager>();
         playerHealth    = GetComponent<PlayerHealth>();
+        //animator        = GetComponent<Animator>();
     }  
 
     public int GetPlayerIndex(){

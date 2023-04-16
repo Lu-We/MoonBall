@@ -2,18 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : MonoBehaviour
+public class DeadlyBall : MonoBehaviour
 {
     public Transform moon;
 
-    public Material medSpeedMat;
-    public Material maxSpeedMat;
-    private Material baseMat;
-
-    public float ballSpeed  = 50f;
+    public float ballSpeed  = 80f;
     public float minSpeed   = 20f;
     public float medSpeed   = 120f;
-    public float maxSpeed   = 200f;
+    public float maxSpeed   = 80f;
     
     public int curveNr = 0;
 
@@ -21,10 +17,10 @@ public class Ball : MonoBehaviour
     public float curve2 = 30f;
     public float curve3 = 33f;
     
-    public float lerpSpeed = 5f;
+    public float lerpSpeed = 1f;
 
     private float offset = -27f;
-    private float damageMultiply = 1f;
+    private float damageMultiply = 5f;
 
     private Renderer myrenderer;
     private Rigidbody myRb;
@@ -33,13 +29,9 @@ public class Ball : MonoBehaviour
     void Start()
     {
         myrenderer = GetComponent<Renderer>();
-        baseMat = myrenderer.material;
         myRb = transform.GetComponent<Rigidbody>();
         offset = -(moon.position - transform.position).magnitude;
-    }
-
-    private void Update() {
-        CheckMaxSpeedReach();
+        Destroy(gameObject, 10f);
     }
 
     // Update is called once per frame
@@ -63,7 +55,7 @@ public class Ball : MonoBehaviour
                 break;
         }
 
-      
+        Debug.Log(offset);
         transform.position = gravityUp * offset;
 
         
@@ -83,12 +75,12 @@ public class Ball : MonoBehaviour
     }
 
     public void Accelerate(float amount){
-        ballSpeed *= 1.05f;
+        ballSpeed *= 1f;
         ballSpeed = Mathf.Clamp(ballSpeed,minSpeed, maxSpeed);
     }
 
     public void Deccelerate(float amount){
-         ballSpeed /= 1.1f;
+         ballSpeed /= 1f;
          ballSpeed = Mathf.Clamp(ballSpeed,minSpeed, maxSpeed);
     }
 
@@ -101,21 +93,7 @@ public class Ball : MonoBehaviour
     }
 
     public void ChangeDirection(){        
-            transform.Rotate(transform.up, 180, Space.Self);
-    }
-
-    public void CheckMaxSpeedReach(){
-
-        if(ballSpeed >= maxSpeed){
-            myrenderer.material = maxSpeedMat;
-        }
-        else if(ballSpeed >= medSpeed){
-            myrenderer.material = medSpeedMat;
-
-        }else if(ballSpeed < medSpeed){
-             myrenderer.material = baseMat;
-        }
-        
+           transform.Rotate(transform.up, 180, Space.Self);
     }
 
 
@@ -126,7 +104,7 @@ public class Ball : MonoBehaviour
                 return;
             player.playerHealth.hitNormal = myRb.velocity;
             player.playerHealth.InflictDamage( ballSpeed / 10f * damageMultiply);
-            Debug.Log(player.playerHealth.GetHealth());
+            //Debug.Log(player.playerHealth.GetHealth());
         }
     }
     

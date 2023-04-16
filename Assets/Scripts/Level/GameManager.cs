@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
                 MoonEvent(Random.Range(0,7));
                 nextEventTime = Time.time + tenSec;
             }
-            Debug.Log("Player Count :" + players.Count);        
+            //Debug.Log("Player Count :" + players.Count);        
             CheckWinner();
         }
 
@@ -91,8 +91,8 @@ public class GameManager : MonoBehaviour
         switch(eventId){
             case 0: // Ajout de ball
                 Debug.Log("AddBall");
-                Vector3 randomVector = new Vector3(Random.Range(0,1f),Random.Range(0,1f),Random.Range(0,1f)) * 50f; 
-                var ball = Instantiate(ballPrefab, moon.position + randomVector, Quaternion.identity );
+                Vector3 randomVector = new Vector3(Random.Range(0,1f),Random.Range(0,1f),0f).normalized * 50f; 
+                var ball = Instantiate(ballPrefab, moon.position + randomVector, Quaternion.LookRotation(randomVector,Vector3.up) );
                 ball.GetComponent<Ball>().SetMoon(moon);
                 ball.GetComponent<Ball>().SetCurve(Random.Range(0,3));
                 if(Random.Range(0f,1f) >= 0.5f) ball.GetComponent<Ball>().ChangeDirection();
@@ -104,10 +104,17 @@ public class GameManager : MonoBehaviour
                 break;
             case 2: // slow down
                 Debug.Log("SpeedDown");
-                StartCoroutine(SpeedEvent(0.8f));
+                StartCoroutine(SpeedEvent(0.5f));
                 break;
             case 3:  // Deadly ball (can't retourner)
                 Debug.Log("SpawnDeadlyBall");
+                Vector3 randomVector1 = new Vector3(Random.Range(0,1f),Random.Range(0,1f),0f).normalized * 50f; 
+                var ball1 = Instantiate(deadlyBallPrefab, moon.position + randomVector1, Quaternion.LookRotation(randomVector1,Vector3.up) );
+
+                Debug.Log("SpawnDeadlyBall" + (moon.position + randomVector1));
+                ball1.GetComponent<DeadlyBall>().SetMoon(moon);
+                ball1.GetComponent<DeadlyBall>().SetCurve(Random.Range(0,3));
+                if(Random.Range(0f,1f) >= 0.5f) ball1.GetComponent<DeadlyBall>().ChangeDirection();
                 break;
             case 4:  // change ball direction + spawn random raquette
                 Debug.Log("ChangeDir+Raquette");
