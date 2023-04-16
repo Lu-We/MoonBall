@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 public class InputManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class InputManager : MonoBehaviour
         //Jump Buffers
     private float jumpPressedRememberTime = 0.2f;
     private float jumpPressedRemember;
+    public  float dashCooldown = 1f;
+    private float nextDashTime = 0f;
     private float dashPressedRememberTime = 0.2f;
     private float dashPressedRemember;
 
@@ -21,7 +24,7 @@ public class InputManager : MonoBehaviour
     }
 
 
-    void Awake()
+    public PlayerControls CreateControls()
     {
         controls = new PlayerControls();
 
@@ -35,6 +38,8 @@ public class InputManager : MonoBehaviour
 
         controls.Player.Attack.performed += ctx => AttackPressed();
         controls.Player.Attack.canceled += ctx => Attackcanceled();   
+
+        return controls;
     }
 
     private void OnEnable() {
@@ -44,11 +49,19 @@ public class InputManager : MonoBehaviour
     private void OnDisable() {
         controls.Player.Disable();
     }
+    
 
     void FixedUpdate()
     {   
         CheckJump();
         CheckDash();
+
+        if(moveInput.y < -0.2f){
+            Debug.Log("Crouch");
+            player.stateManager.SetIsCrouching(true);
+        }else{
+            player.stateManager.SetIsCrouching(false);
+        }
     }
 
     private void DashPressed(){
@@ -58,12 +71,19 @@ public class InputManager : MonoBehaviour
     private void CheckDash(){
         dashPressedRemember -= Time.fixedDeltaTime;
         //Check Jumping Intent and if player was (grounded + Coyotte time)
-        if((dashPressedRemember > 0))
+        if(dashPressedRemember > 0)
         {
-            dashPressedRemember = 0;
-            player.stateManager.SetIsDashing(true);
-            player.movementManager.PerformDash();       
-        }
+            if(Time.time > nextDashTime)
+            {
+                dashPressedRemember = 0;
+                nextDashTime = Time.time + dashCooldown;
+                player.stateManager.SetIsDashing(true);
+                player.movementManager.PerformDash();       
+            }else{
+                Debug.Log("Can't Dash : Cooldown = " + (nextDashTime - Time.time) );
+            }
+    }
+        
     }
 
     private void JumpPressed(){
@@ -93,9 +113,28 @@ public class InputManager : MonoBehaviour
     public virtual Vector2 GetMoveInput(){
         return moveInput;
     }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position+transform.up*2, 8f);
+
+    }
 
     private void AttackPressed(){
-        player.raquette.SetActive(true);
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position+transform.up*2, 8f);
+        foreach(var other in hitColliders){
+            if(other.CompareTag("Ball")){
+                Ball ballHit = other.GetComponent<Ball>();
+                ballHit.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                ballHit.SetCurve(2);           
+                
+                ballHit.Accelerate(5f);
+                ballHit.ChangeDirection();
+            }
+        }
+
+        player.GetComponent<ParticleSystem>().Play();
     }
 
     private void Attackcanceled(){
