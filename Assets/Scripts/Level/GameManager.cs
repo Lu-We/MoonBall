@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
             if(Time.time >= nextEventTime){
                 DisableMoonsUI();
                 musicManager.PlayCountdownFinalSFX();
-                MoonEvent(4);//Random.Range(0,7));
+                MoonEvent(Random.Range(0,7));
                 nextEventTime = Time.time + tenSec;
             }
             else if(Time.time >= nextEventTime1){
@@ -109,6 +109,7 @@ public class GameManager : MonoBehaviour
             CheckWinner();
         }
 
+        CheckCaDingDong();
     }
 
 
@@ -126,7 +127,7 @@ public class GameManager : MonoBehaviour
         if (musicManager.inThirdLayer) 
             return;
         foreach(PlayerScript p in players){
-            if(p.playerHealth.GetHealth() <= 0.4f * p.playerHealth.maxHealth){
+            if(p.playerHealth.GetHealth() <= 0.55f * p.playerHealth.maxHealth){
                 musicManager.inThirdLayer = true;
             }
         }
@@ -173,7 +174,7 @@ public class GameManager : MonoBehaviour
                 moon2.enabled = true;
                 Debug.Log("SpeedUp");
                 musicManager.TriggerSpeedParameter();
-                StartCoroutine(SpeedEvent(1.5f));
+                StartCoroutine(SpeedEvent(2f));
                 break;
             case 2: // slow down
                 moon3.enabled = true;
@@ -229,7 +230,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator SpeedEvent(float factor){
         Time.timeScale = factor;
         Time.fixedDeltaTime = Time.timeScale * defaultFixedDeltaTime;
-        yield return new WaitForSecondsRealtime(9.5f);
+        yield return new WaitForSeconds(9.5f);
         Time.timeScale = 1f;
         Time.fixedDeltaTime = defaultFixedDeltaTime; 
     }

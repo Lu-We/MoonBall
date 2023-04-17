@@ -54,6 +54,7 @@ public class PlayerHealth : MonoBehaviour
     private void CheckStatus(){
         if(health <= 0.3f * maxHealth){
             //Debug.Log("LowHealth");
+            
             healthBar.color = lowHealth;
         }
 

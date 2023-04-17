@@ -20,6 +20,16 @@ public class InputManager : MonoBehaviour
     private float dashPressedRememberTime = 0.2f;
     private float dashPressedRemember;
 
+    // attack
+    private float attackUpPressedRememberTime = 0.2f;
+    private float attackUpPressedRemember;
+    private float attackMidPressedRememberTime = 0.2f;
+    private float attackMidPressedRemember;
+    private float attackDownPressedRememberTime = 0.2f;
+    private float attackDownPressedRemember;
+    public  float attackCooldown = .5f;
+    private float nextAttackTime = 0f;
+
     private bool isReversed = false;
 
     private void Start() {
@@ -56,7 +66,9 @@ public class InputManager : MonoBehaviour
     }
 
     private void OnEnable() {
-       controls.Player.Enable();
+        if(controls != null){
+            controls.Player.Enable();
+        }
     }
 
     private void OnDisable() {
@@ -70,6 +82,9 @@ public class InputManager : MonoBehaviour
     {   
         CheckJump();
         CheckDash();
+        CheckAttackMid();
+        CheckAttackDown();
+        CheckAttackUp();
 
         if(moveInput.y < -0.2f){
             //Debug.Log("Crouch");
@@ -80,7 +95,13 @@ public class InputManager : MonoBehaviour
     }
 
     private void OnMove(CallbackContext ctx){
-        moveInput = isReversed? -ctx.ReadValue<Vector2>() : ctx.ReadValue<Vector2>();
+        if(isReversed){
+            moveInput.y = ctx.ReadValue<Vector2>().y;
+            moveInput.x = -ctx.ReadValue<Vector2>().x;
+        }
+        else{
+            moveInput = ctx.ReadValue<Vector2>();
+        }
     }
 
     private void OnStop(CallbackContext ctx){
@@ -144,47 +165,73 @@ public class InputManager : MonoBehaviour
     }
 
     private void AttackUpPressed(){
-        player.animator.SetBool("AttackUp",true);
-        player.audioManager.PlayAttackUpSFX();
-        GameObject hitbox;
-        Vector3 offset ;
-        int curve;
-        offset = new Vector3(0, 3, 0);
-        curve = 2;
-        
+        attackUpPressedRemember = attackUpPressedRememberTime;
+    }
 
-        hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
-        hitbox.GetComponent<raquette>().InitRaquette(offset,8,.15f,curve);
+    private void CheckAttackUp(){
+        attackUpPressedRemember -= Time.fixedDeltaTime;
 
-        
+        if( attackUpPressedRemember > 0f && Time.time > nextAttackTime)
+        {
+            player.animator.SetBool("AttackUp",true);
+            player.audioManager.PlayAttackUpSFX();
+            GameObject hitbox;
+            Vector3 offset ;
+            int curve;
+            offset = new Vector3(0, 3, 0);
+            curve = 2;            
+
+            hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
+            hitbox.GetComponent<raquette>().InitRaquette(offset,8,.15f,curve);
+
+            nextAttackTime = Time.time + attackCooldown;
+        }        
     }
 
     private void AttackMidPressed(){
-        //Debug.Log("AttackMid");
-        player.animator.SetBool("AttackMid",true);
-        player.audioManager.PlayAttackMidSFX();
-        GameObject hitbox;
-        Vector3 offset = new Vector3(0, 2, 0);
-        hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
-        hitbox.GetComponent<raquette>().InitRaquette(offset,8,0.15f,1);
+        attackMidPressedRemember = attackMidPressedRememberTime;
+    }
 
-       
+    private void CheckAttackMid(){
+
+        attackMidPressedRemember -= Time.fixedDeltaTime;
+
+        if( attackMidPressedRemember > 0f && Time.time > nextAttackTime ){
+            
+            player.animator.SetBool("AttackMid",true);
+            player.audioManager.PlayAttackMidSFX();
+            GameObject hitbox;
+            Vector3 offset = new Vector3(0, 2, 0);
+            hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
+            hitbox.GetComponent<raquette>().InitRaquette(offset,8,0.15f,1);
+
+            nextAttackTime = Time.time + attackCooldown;
+        }       
     }
 
     private void AttackDownPressed(){
-        //Debug.Log("AttackDown");
-        player.animator.SetBool("AttackDown",true);
-        player.audioManager.PlayAttackDownSFX();
-        GameObject hitbox;
-        Vector3 offset;
-        int curve;
+        attackDownPressedRemember = attackDownPressedRememberTime;
+    }
 
-        offset = new Vector3(0, 1, 0);
-        curve = 0;
-  
-        hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
-        hitbox.GetComponent<raquette>().InitRaquette(offset,8,.15f,curve);
-        
+    private void CheckAttackDown(){
+
+        attackDownPressedRemember -= Time.fixedDeltaTime;
+
+        if( attackDownPressedRemember > 0f && Time.time > nextAttackTime){
+            player.animator.SetBool("AttackDown",true);
+            player.audioManager.PlayAttackDownSFX();
+            GameObject hitbox;
+            Vector3 offset;
+            int curve;
+
+            offset = new Vector3(0, 1, 0);
+            curve = 0;
+    
+            hitbox = Instantiate(raquetteprefab,player.transform.position, Quaternion.identity,player.transform);
+            hitbox.GetComponent<raquette>().InitRaquette(offset,8,.15f,curve);
+
+            nextAttackTime = Time.time + attackCooldown;
+        }        
     }
 
     private void LateUpdate() {

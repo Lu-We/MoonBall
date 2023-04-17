@@ -105,6 +105,21 @@ public class Ball : MonoBehaviour
     }
 
     public void SetMaxSpeed(){
+        StartCoroutine(MaxSpeed());
+    }
+
+    private IEnumerator MaxSpeed(){
+        float elapsedTime = 0f;
+        float waitTime = 4f; 
+        float speedParam= ballSpeed;
+        while (elapsedTime < waitTime)
+        {
+            ballSpeed = Mathf.Lerp(speedParam, maxSpeed, (elapsedTime / waitTime));
+            elapsedTime += Time.deltaTime;
+            // Yield here
+            yield return null;
+        }  
+        // Make sure we got there
         ballSpeed = maxSpeed;
     }
 
@@ -137,7 +152,7 @@ public class Ball : MonoBehaviour
             if(player == null)
                 return;
             player.playerHealth.hitNormal = myRb.velocity;
-            player.playerHealth.InflictDamage( ballSpeed / 10f * damageMultiply);
+            player.playerHealth.InflictDamage( ballSpeed / 30f * damageMultiply);
             //Debug.Log(player.playerHealth.GetHealth());
         }
     }
